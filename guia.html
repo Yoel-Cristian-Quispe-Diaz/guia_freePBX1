@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalación de FreePBX - Guía Educativa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+        
+        .intro-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+        }
+        
+        .intro-card h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .intro-card h2::before {
+            content: "👥";
+            font-size: 1.2em;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .vm-title::before { content: "💻"; }
+        .freepbx-title::before { content: "📞"; }
+        
+        .step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            background: #e8f4f8;
+            border-left-color: #3498db;
+            transform: translateX(5px);
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+        
+        .step-content {
+            display: inline-block;
+            vertical-align: top;
+            width: calc(100% - 50px);
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            border-left: 4px solid #e74c3c;
+            position: relative;
+        }
+        
+        .code::before {
+            content: "$ ";
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+        
+        .image-caption {
+            margin-top: 10px;
+            font-style: italic;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #fff5cd, #ffeaa7);
+            border: 1px solid #fdcb6e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .warning::before {
+            content: "⚠️ ";
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+        
+        .warning-title {
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 1px solid #a3d977;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .success::before {
+            content: "✅ ";
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+        
+        .optional {
+            background: linear-gradient(135deg, #e8f4f8, #d1ecf1);
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #17a2b8;
+        }
+        
+        .optional::before {
+            content: "💡 ";
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+        
+        .optional-title {
+            font-weight: bold;
+            color: #17a2b8;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .disadvantages {
+            margin-top: 15px;
+        }
+        
+        .disadvantages ul {
+            margin-left: 20px;
+        }
+        
+        .disadvantages li {
+            margin: 8px 0;
+            color: #e74c3c;
+        }
+        
+        .final-commands {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .completion-message {
+            text-align: center;
+            font-size: 1.1em;
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .step {
+                padding: 15px;
+            }
+            
+            .step-content {
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .step-number {
+                display: block;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Instalación de FreePBX</h1>
+            <div class="subtitle">Guía paso a paso para estudiantes</div>
+        </div>
+        
+        <div class="intro-card">
+            <h2>Bienvenidos al Tutorial</h2>
+            <p>Hola equipo, somos un grupo de 6 estudiantes y en esta guía vamos a aprender juntos cómo instalar FreePBX desde cero. Les voy a explicar cada paso detalladamente para que todos podamos seguir el proceso sin problemas. ¡Empezamos!</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title vm-title">Instalación de la Máquina Virtual</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                    <div class="step-title">Descargar Debian ISO</div>
+                    <p>Primero necesitamos descargar la última versión del ISO para Debian. Vamos todos al sitio oficial de Debian y descargamos la imagen.</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                    <div class="step-title">Crear nueva máquina virtual</div>
+                    <p>Ahora abrimos VirtualBox para crear nuestra nueva máquina virtual. Aquí vamos a configurar el entorno donde instalaremos FreePBX.</p>
+                    <div class="image-container">
+                        <img src="1.png" alt="Pantalla principal de VirtualBox para crear nueva VM">
+                        <div class="image-caption">Pantalla principal de VirtualBox para crear nueva VM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                    <div class="step-title">Configurar nombre y sistema operativo</div>
+                    <p>Le ponemos cualquier nombre que queramos a nuestra máquina virtual y seleccionamos el ISO de Debian que acabamos de descargar. Verán que cuando seleccionamos el ISO, automáticamente se ajustan el Tipo, Subtipo y Versión del sistema operativo. ¡Muy conveniente!</p>
+                    <div class="image-container">
+                        <img src="2.png" alt="Configuración de nombre y selección de ISO">
+                        <div class="image-caption">Configuración de nombre y selección de ISO</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="optional">
+                <div class="optional-title">Paso Opcional - Instalación Desatendida</div>
+                <p>Pueden aplicar la opción de instalación desatendida, la cual automáticamente instalará las configuraciones de Debian y solo necesitarán cambiar los datos de usuario, de la máquina y el dominio.</p>
+                
+                <div class="disadvantages">
+                    <strong>⚠️ Desventajas a considerar:</strong>
+                    <ul>
+                        <li>El sistema se instalará automáticamente en inglés</li>
+                        <li>El usuario no estará añadido por defecto como apto para los comandos de superusuario</li>
+                    </ul>
+                </div>
+                
+                <div class="image-container">
+                    <img src="3.png" alt="Opciones de instalación desatendida">
+                    <div class="image-caption">Opciones de instalación desatendida</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <div class="step-content">
+                    <div class="step-title">Asignar recursos</div>
+                    <p>Aquí es importante que asignemos al menos 4 GB de RAM para que FreePBX funcione correctamente. Las configuraciones del disco duro las podemos dejar por defecto.</p>
+                    <div class="image-container">
+                        <img src="4.png" alt="Configuración de RAM y disco duro">
+                        <div class="image-caption">Configuración de RAM y disco duro</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                <div class="step-content">
+                    <div class="step-title">Configurar red</div>
+                    <p>Después de crear la máquina virtual, es importante que NO la abramos automáticamente. Primero vamos a ir a configuración, luego al apartado de "Red" y cambiamos el tipo de conexión a "Adaptador puente". Esto nos permitirá acceder a FreePBX desde otros dispositivos en nuestra red.</p>
+                    <div class="image-container">
+                        <img src="5.png" alt="Configuración de red en adaptador puente">
+                        <div class="image-caption">Configuración de red en adaptador puente</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">6</span>
+                <div class="step-content">
+                    <div class="step-title">Instalar Debian</div>
+                    <p>Ahora iniciamos la máquina virtual y configuramos la instalación de Debian, o esperamos a que se instale automáticamente (dependiendo si aplicaron o no el paso opcional). Este proceso puede tardar alrededor de 20 minutos, así que vamos por un café ☕</p>
+                    <div class="image-container">
+                        <img src="6.png" alt="Proceso de instalación de Debian">
+                        <div class="image-caption">Proceso de instalación de Debian</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title freepbx-title">Instalación de FreePBX dentro de Debian</h2>
+            
+            <div class="warning">
+                <div class="warning-title">Configuración Importante Antes de Empezar</div>
+                <p>Antes de continuar, necesitamos desactivar el apagado de pantalla automático y la suspensión automática para evitar interrupciones durante la instalación.</p>
+                <div class="image-container">
+                    <img src="7.png" alt="Configuración de energía del sistema">
+                    <div class="image-caption">Configuración de energía del sistema</div>
+                </div>
+            </div>
+            
+            <p><strong>Todos los siguientes pasos los realizaremos mediante el terminal. ¡Manos a la obra!</strong></p>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                    <div class="step-title">Instalar SSH</div>
+                    <p>Primero instalamos SSH para poder acceder remotamente si es necesario:</p>
+                    <div class="code">sudo apt install ssh -y</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                    <div class="step-title">Configurar acceso root por SSH</div>
+                    <p>Habilitamos el login de root por SSH:</p>
+                    <div class="code">echo "PermitRootLogin yes" >> /etc/ssh/sshd_config</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                    <div class="step-title">Reiniciar servicio SSH</div>
+                    <p>Reiniciamos el servicio SSH para aplicar los cambios:</p>
+                    <div class="code">service ssh restart</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <div class="step-content">
+                    <div class="step-title">Instalar herramientas necesarias</div>
+                    <p>Instalamos varias herramientas que nos serán útiles:</p>
+                    <div class="code">apt-get -y install net-tools htop screen tshark vim sngrep</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                <div class="step-content">
+                    <div class="step-title">Navegar al directorio temporal</div>
+                    <p>Nos movemos al directorio temporal:</p>
+                    <div class="code">cd /tmp</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">6</span>
+                <div class="step-content">
+                    <div class="step-title">Descargar script de instalación</div>
+                    <p>Descargamos el script oficial de instalación de FreePBX:</p>
+                    <div class="code">wget https://github.com/FreePBX/sng_freepbx_debian_install/raw/master/sng_freepbx_debian_install.sh -O /tmp/sng_freepbx_debian_install.sh</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">7</span>
+                <div class="step-content">
+                    <div class="step-title">Ejecutar instalación</div>
+                    <p>¡Ahora ejecutamos el script de instalación!</p>
+                    <div class="code">bash /tmp/sng_freepbx_debian_install.sh</div>
+                    <p>Después de este comando, FreePBX comenzará a instalarse. Este es el momento más emocionante 🎉</p>
+                    <div class="image-container">
+                        <img src="8.png" alt="Proceso de instalación de FreePBX en ejecución">
+                        <div class="image-caption">Proceso de instalación de FreePBX en ejecución</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <div class="warning-title">Solución de Problemas Durante la Instalación</div>
+                <p>Si ocurre un error en medio de la instalación (no se preocupen, es normal), sigan estos pasos:</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Paso 1:</strong> Iniciar manualmente MariaDB
+                    <div class="code">service mariadb start</div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Paso 2:</strong> FreePBX requiere PHP 8.2, así que desinstalamos cualquier versión anterior:
+                    <div class="code">sudo apt remove --purge 'php*'</div>
+                    <div class="code">sudo apt autoremove</div>
+                    <div class="code">sudo apt clean</div>
+                </div>
+                
+                <p>Después de esto, volvemos a ejecutar:</p>
+                <div class="code">bash /tmp/sng_freepbx_debian_install.sh</div>
+                
+                <p><em>El script instalará automáticamente la versión correcta de PHP. Si el error persiste por problemas de conexión, simplemente repitan el comando hasta que funcione.</em></p>
+            </div>
+            
+            <div class="success">
+                <strong>¡Instalación Completada!</strong>
+                <p>Cuando la instalación sea exitosa, verán la siguiente pantalla en el terminal:</p>
+                <div class="image-container">
+                    <img src="9.png" alt="Pantalla de confirmación de instalación exitosa">
+                    <div class="image-caption">Pantalla de confirmación de instalación exitosa</div>
+                </div>
+            </div>
+            
+            <div class="final-commands">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">🎯 Comandos Finales</h3>
+                <p>Para iniciar FreePBX, ejecuten:</p>
+                <div class="code">sudo fwconsole start</div>
+                
+                <p>Para verificar la IP de nuestra máquina virtual:</p>
+                <div class="code">ip addr</div>
+                
+                <div class="completion-message">
+                    🎉 ¡Felicitaciones equipo! Hemos completado exitosamente la instalación de FreePBX
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
